@@ -11,6 +11,14 @@ The logic is like this:
 
 */
 
+// Map numbers to the four basic operations
+// const operations = {
+//   "+": (a, b) => a + b,
+//   "-": (a, b) => a - b,
+//   "*": (a, b) => a * b,
+//   "/": (a, b) => a / b,
+// };
+
 // parse string of form "123456" to array of numbers [1, 2, 3, 4, 5, 6]
 function parseNumbers(numbers) {
   return numbers.split("").map((n) => parseInt(n));
@@ -36,6 +44,56 @@ export function generatePermutations(numbers) {
   // Only generate permutations if the input is valid
     if (nums.length > 0) { 
   generate(nums);
-  return permutations;}
-        
+  return permutations;}       
 }
+
+// For a single permutation, we generate all possible ways to combine the numbers using the four basic operations
+export function generateCombinations(numbers, target=24) {
+  const operators = ['+', '-', '*', '/'];
+
+  function calculate(a, b, operator) {
+    switch (operator) {
+      case '+': return a + b;
+      case '-': return a - b;
+      case '*': return a * b;
+      case '/': return b !== 0 ? a / b : null; // Avoid division by zero
+      default: throw new Error('Invalid operator');
+    }
+  }
+
+  function combine(arr, currentExpression, currentValue) {
+    if (arr.length === 0) {
+      return [[currentExpression, currentValue]];
+    }
+
+    const results = [];
+    const nextNumber = arr[0];
+    const remainingNumbers = arr.slice(1);
+
+    for (const operator of operators) {
+      const newValue = calculate(currentValue, nextNumber, operator);
+      if (newValue !== null) { // Skip invalid operations like division by zero
+        const newExpression = `(${currentExpression} ${operator} ${nextNumber})`;
+        results.push(...combine(remainingNumbers, newExpression, newValue));
+      }
+    }
+    // finally return only the results that match the target value
+    return results.filter((arr) => arr[1] === target);
+  }
+
+  // Start the recursive process with the first number as the initial value
+  return combine(numbers.slice(1), numbers[0].toString(), numbers[0]);
+}
+
+// Finally, we combine the two functions to generate all possible combinations for all permutations
+export async function generateAllCombinations(numbers, target) {
+  const permutations = generatePermutations(numbers);
+  const results = [];
+  for (const permutation of permutations) {
+    results.push(...generateCombinations(permutation, target));
+  }
+  // Finally, filter out all results that are duplicates
+  return results;
+}
+
+
