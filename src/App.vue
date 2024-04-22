@@ -1,23 +1,21 @@
 <template>
-  <!-- Component for defining number N -->
-  <DefineNumber24 ref="numberN" />
-  <!-- Component for inserting n numbers -->
-  <NumberInput ref="valueGuess" />
-  <!-- Button component to submit -->
-  <div class="card flex justify-content-center" v-if="!showResult">
-    <!-- When showResult is false button should be disabled -->
-    <Button label="Submit" v-model="showResult" @click="toggleAndLoad" :loading="loading"/>
+<div id="app">
+  <div class="app-container">
+    <h1 class="app-title">Number Game 24+</h1>
+    <DefineNumber24 ref="numberN" class="large-component" />
+    <NumberInput ref="valueGuess" class="large-component" />
+    <div class="card flex justify-content-center" v-if="!showResult">
+      <Button label="Submit" v-model="showResult" @click="toggleAndLoad" :loading="loading" class="large-button" />
+    </div>
+    <ResultMessage
+      :show="showResult"
+      :valueN="numberN.value"
+      :valueGuess="valueGuess.value"
+      :result="results"
+      class="result-section"
+    />
   </div>
-  <!-- Component to show result -->
-  <ResultMessage
-    :show="showResult"
-    :valueN="numberN.value"
-    :valueGuess="valueGuess.value"
-    :result="results"
-  />
-  <!-- Debug Component -->
-  <!-- <pre>{{ valueGuess }}</pre>
-  <pre>{{ results }}</pre> -->
+  </div>
 </template>
 
 <script setup>
@@ -84,5 +82,46 @@ async function toggle() {
 .custom-otp-input:focus {
   outline: 0 none;
   border-bottom-color: var(--primary-color);
+}
+
+.app-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(200, 200, 200, 0.8);
+  
+}
+
+#app {
+  background-image: url('./assets/backgroundImage.svg');
+  background-repeat: repeat;
+  background-size: cover;
+  background-size: 30%; /* Adjust the size to your desired percentage */
+  min-height: 90vh;
+}
+
+.app-title {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.large-component {
+  font-size: 44px;
+  margin-bottom: 20px;
+}
+
+.large-button {
+  font-size: 28px;
+  padding: 10px 20px;
+}
+
+.result-section {
+  margin-top: 30px;
 }
 </style>

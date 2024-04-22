@@ -5,9 +5,9 @@
       v-model="value"
       showButtons
       buttonLayout="vertical"
-      style="width: 3rem"
+      style="width: 4rem"
       :min="12"
-      :max="99"
+      :max="999"
     >
       <template #incrementbuttonicon>
         <span class="pi pi-plus" />

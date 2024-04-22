@@ -6,10 +6,10 @@
         <input type="text" v-bind="attrs" v-on="events" class="custom-otp-input" />
       </template>
     </InputOtp>
-    <div v-if="value.length < 3" class="p-text-center p-text-danger">
-      Please enter at least 3 numbers, currently value: {{ value }}
-    </div>
   </div>
+  <div v-if="value.length < 3" class="card p-text-center p-text-danger flex justify-content-center">
+      Please enter at least 3 numbers
+    </div>
 </template>
 
 <script setup>
@@ -25,7 +25,7 @@ defineExpose({
 
 <style scoped>
 .custom-otp-input {
-  width: 40px;
+  width: 44px;
   font-size: 36px;
   border: 0 none;
   appearance: none;
@@ -39,4 +39,11 @@ defineExpose({
   outline: 0 none;
   border-bottom-color: var(--primary-color);
 }
+
+.card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
 </style>
