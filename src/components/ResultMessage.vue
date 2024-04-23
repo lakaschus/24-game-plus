@@ -2,11 +2,10 @@
 <template>
   <div class="card" v-if="show">
     <Message severity="info" :closable="false">
-      Number of solutions: {{ result.length }}
+      <b>{{ result.length }}</b> solutions found in <b>{{ String(time).slice(0, 6) }}</b> ms
     </Message>
     <div for="result" v-for="item in result" :key="item">
       <Message severity="secondary" icon="pi pi-equals" :closable="false" style="backgroundColor: var(--primary-color)">
-      <!-- remove first and last char -->
         {{ item[0].slice(1, -1)}}
       </Message>
     </div>
@@ -27,6 +26,7 @@ const props = defineProps({
   show: Boolean,
   valueN: Number,
   valueGuess: String,
+  time: Number,
   result: {
     type: Array,
     default: () => []

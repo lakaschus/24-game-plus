@@ -12,6 +12,7 @@
       :valueN="numberN.value"
       :valueGuess="valueGuess.value"
       :result="results"
+      :time="time"
       class="result-section"
     />
   </div>
@@ -32,6 +33,9 @@ const showResult = ref(false);
 const results = ref([]);
 const loading = ref(false);
 const permutations = ref(0);
+const time = ref(0);
+const start = ref(0);
+const end = ref(0);
 
 const computedValueGuess = computed(() => valueGuess.value.value);
 const computedNumberN = computed(() => numberN.value.value);
@@ -40,6 +44,11 @@ const computedNumberN = computed(() => numberN.value.value);
 watch([computedValueGuess, computedNumberN], async () => {
   showResult.value = false;
   loading.value = false;
+  // end.value = performance.now();
+  // time.value = end.value - start.value;
+  // console.log("Time taken: ", time.value);
+  // console.log("start", start.value);
+  // console.log("end", end.value);
 });
 
 async function toggleAndLoad() {
@@ -62,7 +71,11 @@ async function generateAllCombinations(numbers, target) {
 
 async function toggle() {
   // Wait until generateAllCombinations is done before assigning the value to results
+  // Measure time ...
+  start.value = performance.now();
   results.value = await generateAllCombinations(valueGuess.value.value, numberN.value.value);
+  end.value = performance.now();
+  time.value = end.value - start.value;
   console.log("results", results.value);
 }
 </script>
