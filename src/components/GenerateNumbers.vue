@@ -7,19 +7,34 @@
 
 <script setup>
 import Button from 'primevue/button';
-import { defineEmits } from 'vue';
+import { generateAllCombinations } from '../logic/logic.js';
+import { defineEmits, defineProps } from 'vue';
 
 const emit = defineEmits(['numbersGenerated']);
 
-function generateNumbers() {
+const props = defineProps({
+  valueN: Number
+});
+
+async function generateNumbers() {
   const count = Math.floor(Math.random() * 3) + 3; // Generate a random count between 3 and 5
-  const numbers = [];
+  let numbers = '';
 
   for (let i = 0; i < count; i++) {
     const randomNumber = Math.floor(Math.random() * 9) + 1; // Generate a random number between 1 and 9
-    numbers.push(randomNumber);
+    numbers = numbers + String(randomNumber);
   }
 
-  emit('numbersGenerated', numbers.join('')); // Emit the generated numbers as a string
+  console.log('Generated numbers:', numbers);
+
+  // if no valid combinations are found, try again
+  const combs = await generateAllCombinations(numbers, props.valueN, true);
+  console.log('Checking for valid combinations', combs)
+  if (combs.length === 0) {
+    console.log('No valid combinations found, trying again')
+    return generateNumbers();
+  }
+
+  emit('numbersGenerated', numbers); // Emit the generated numbers as a string
 }
 </script>

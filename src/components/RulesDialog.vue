@@ -8,7 +8,6 @@
       <li>Manipulate these integers in any order so that they yield 24 - or any other number that you specify in the UI;</li>
       <li>If you play with friends: Whoever comes up with a valid arithmetic sequence first wins</li>
       <li>Playing alone: Try to come up with as many different valid solutions as possible!</li>
-      <li>Note: Not every set of integers has solutions! Especially for less than four numbers. In that case, the one who calls the nonexistence of a valid solution wins ;)</li>
     </ul>
 
     <p>If you want to see how it works (Mostly bruteforce) or want to modify this game further, checkout the <a href="https://github.com/lakaschus/24-game-plus" target="_blank">github repo</a>. </p>

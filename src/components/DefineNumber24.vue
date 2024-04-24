@@ -6,8 +6,8 @@
       showButtons
       buttonLayout="vertical"
       style="width: 4rem"
-      :min="-999999"
-      :max="999999"
+      :min="-999"
+      :max="999"
     >
       <template #incrementbuttonicon>
         <span class="pi pi-plus" />

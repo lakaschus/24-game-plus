@@ -6,7 +6,7 @@
     <RulesDialog />
   </div>
     <DefineNumber24 ref="numberN" class="large-component" />
-    <GenerateNumbers @numbersGenerated="fillNumberInput" />
+    <GenerateNumbers :valueN="numberN.value" @numbersGenerated="fillNumberInput" />
     <NumberInput ref="valueGuess" class="large-component" />
     <div class="card flex justify-content-center" v-if="!showResult">
       <Button label="Submit" v-model="showResult" @click="toggleAndLoad" :loading="loading" class="large-button" />

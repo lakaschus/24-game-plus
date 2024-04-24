@@ -101,11 +101,21 @@ export function generateCombinations(numbers, target = 24) {
 
 
 // Finally, we combine the two functions to generate all possible combinations for all permutations
-export async function generateAllCombinations(numbers, target) {
+export async function generateAllCombinations(numbers, target, earlyExit = false) {
   const permutations = generatePermutations(numbers);
+  // shuffle permutations
+  permutations.sort(() => Math.random() - 0.5);
   const results = [];
+  let i = 0;
   for (const permutation of permutations) {
     results.push(...generateCombinations(permutation, target));
+    if (earlyExit && results.length > 0) {
+      return results;
+    }
+    if (earlyExit && i >= 50) {
+      return results;
+    }
+    i++;
   }
   // Finally, filter out all results that are duplicates
   return results;
