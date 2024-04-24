@@ -1,8 +1,12 @@
 <template>
 <div id="app">
   <div class="app-container">
-    <h1 class="app-title">Number Game 24+</h1>
+  <div class="header-container app-title">
+    <h1>Game 24 Plus</h1>
+    <RulesDialog />
+  </div>
     <DefineNumber24 ref="numberN" class="large-component" />
+    <GenerateNumbers @numbersGenerated="fillNumberInput" />
     <NumberInput ref="valueGuess" class="large-component" />
     <div class="card flex justify-content-center" v-if="!showResult">
       <Button label="Submit" v-model="showResult" @click="toggleAndLoad" :loading="loading" class="large-button" />
@@ -21,6 +25,8 @@
 
 <script setup>
 import DefineNumber24 from "./components/DefineNumber24.vue";
+import RulesDialog from "./components/RulesDialog.vue";
+import GenerateNumbers from './components/GenerateNumbers.vue';
 import NumberInput from "./components/NumberInput.vue";
 import Button from "primevue/button";
 import ResultMessage from "./components/ResultMessage.vue";
@@ -50,6 +56,10 @@ watch([computedValueGuess, computedNumberN], async () => {
   // console.log("start", start.value);
   // console.log("end", end.value);
 });
+
+function fillNumberInput(numbers) {
+  valueGuess.value.value = numbers;
+}
 
 async function toggleAndLoad() {
   loading.value = true;
@@ -81,6 +91,11 @@ async function toggle() {
 </script>
 
 <style scoped>
+.header-container {
+  display: flex;
+  align-items: center; /* Aligns items vertically in the center */
+}
+
 .custom-otp-input {
   width: 40px;
   font-size: 36px;
@@ -118,9 +133,9 @@ async function toggle() {
 }
 
 .app-title {
-  font-size: 32px;
+  font-size: 24px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   color: var(--primary-color);
 }
 

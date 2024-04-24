@@ -1,7 +1,7 @@
 <!-- OtpInput.vue -->
 <template>
   <div class="card flex justify-content-center">
-    <InputOtp v-model="value" :length="6">
+    <InputOtp v-model="value" :length="5">
       <template #default="{ attrs, events }">
         <input type="text" v-bind="attrs" v-on="events" class="custom-otp-input" />
       </template>

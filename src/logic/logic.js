@@ -26,64 +26,79 @@ function parseNumbers(numbers) {
 
 // Function to generate all possible permutations of the numbers; export function
 export function generatePermutations(numbers) {
-  console.log("numbers", numbers);
   const nums = parseNumbers(numbers);
-  console.log("nums", nums);
   const permutations = [];
-  const generate = (arr, m = []) => {
-    if (arr.length === 0) {
-      permutations.push(m);
-    } else {
-      for (let i = 0; i < arr.length; i++) {
-        let curr = arr.slice();
-        let next = curr.splice(i, 1);
-        generate(curr.slice(), m.concat(next));
+  const used = new Array(nums.length).fill(false);
+
+  function generate(currentPermutation) {
+      if (currentPermutation.length === nums.length) {
+          permutations.push([...currentPermutation]);
+          return;
       }
-    }
-  };
-  // Only generate permutations if the input is valid
-    if (nums.length > 0) { 
-  generate(nums);
-  return permutations;}       
+
+      for (let i = 0; i < nums.length; i++) {
+          if (!used[i]) {
+              used[i] = true;
+              currentPermutation.push(nums[i]);
+              generate(currentPermutation);
+              currentPermutation.pop();
+              used[i] = false;
+          }
+      }
+  }
+
+  if (nums.length > 0) {
+      generate([]);
+  }
+
+  return permutations;
 }
 
+
 // For a single permutation, we generate all possible ways to combine the numbers using the four basic operations
-export function generateCombinations(numbers, target=24) {
+export function generateCombinations(numbers, target = 24) {
   const operators = ['+', '-', '*', '/'];
+  const memo = new Map();
 
   function calculate(a, b, operator) {
     switch (operator) {
       case '+': return a + b;
       case '-': return a - b;
       case '*': return a * b;
-      case '/': return b !== 0 ? a / b : null; // Avoid division by zero
+      case '/': return b !== 0 ? a / b : null;
       default: throw new Error('Invalid operator');
     }
   }
 
-  function combine(arr, currentExpression, currentValue) {
-    if (arr.length === 0) {
-      return [[currentExpression, currentValue]];
+  function combine(index, currentExpression, currentValue) {
+    if (index === numbers.length) {
+      return currentValue === target ? [[currentExpression, currentValue]] : [];
+    }
+
+    const memoKey = `${index}-${currentExpression}-${currentValue}`;
+    if (memo.has(memoKey)) {
+      return memo.get(memoKey);
     }
 
     const results = [];
-    const nextNumber = arr[0];
-    const remainingNumbers = arr.slice(1);
+    const nextNumber = numbers[index];
 
     for (const operator of operators) {
       const newValue = calculate(currentValue, nextNumber, operator);
-      if (newValue !== null) { // Skip invalid operations like division by zero
+      if (newValue !== null) {
         const newExpression = `(${currentExpression} ${operator} ${nextNumber})`;
-        results.push(...combine(remainingNumbers, newExpression, newValue));
+        const subResults = combine(index + 1, newExpression, newValue);
+        results.push(...subResults);
       }
     }
-    // finally return only the results that match the target value
-    return results.filter((arr) => arr[1] === target);
+
+    memo.set(memoKey, results);
+    return results;
   }
 
-  // Start the recursive process with the first number as the initial value
-  return combine(numbers.slice(1), numbers[0].toString(), numbers[0]);
+  return combine(1, numbers[0].toString(), numbers[0]);
 }
+
 
 // Finally, we combine the two functions to generate all possible combinations for all permutations
 export async function generateAllCombinations(numbers, target) {
