@@ -29,5 +29,5 @@ RUN npm install -g serve
 COPY --from=0 /app/dist ./dist
 
 # Instruct Docker to listen on port 5000 and run the serve command
-EXPOSE 5000
-CMD ["serve", "-s", "dist", "-l", "5000"]
+EXPOSE 80
+CMD ["serve", "-s", "dist", "-l", "80"]
