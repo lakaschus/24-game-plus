@@ -41,23 +41,8 @@ az acr update -n $CONTAINER_REGISTRY --admin-enabled true
 echo "Retrieving the password for the container registry"
 export ACR_PASSWORD=$(az acr credential show --name $CONTAINER_REGISTRY --query "passwords[0].value" --output tsv)
 
-# Check if container registry is created and can be accessed, write table into variable for later use
+# Wait some time to be sure that the image is pushed to the container registry and accessible
 sleep 30
-export ACR_LIST=$(az acr repository list --name $CONTAINER_REGISTRY --output table)
-# Check, that it is accessible
-
-# Now do this in a loop every 30 seconds until the image is found
-tries=0
-while [[ $ACR_LIST != *"$GAME_NAME"* ]]; do
-    tries=$((tries+1))
-    if [ $tries -gt 3 ]; then
-        echo "Error: Image $GAME_NAME not found in container registry after 3 tries"
-        exit 1
-    fi
-    echo "Image $GAME_NAME not found in container registry, retrying in 30 seconds"
-    sleep 30
-    export ACR_LIST=$(az acr repository list --name $CONTAINER_REGISTRY --output table)
-done
 
 echo "Create an azure container instance (ACI) to run the container"
 az container create --name $GAME_NAME --image $CONTAINER_REGISTRY.azurecr.io/$GAME_NAME --dns-name-label $GAME_NAME --ports 80 --registry-username $CONTAINER_REGISTRY --registry-password $ACR_PASSWORD
